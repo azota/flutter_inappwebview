@@ -68,9 +68,21 @@ public class InAppWebViewClient extends WebViewClient {
   @Override
   public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
     InAppWebView webView = (InAppWebView) view;
-    Log.e("TAG", "shouldOverrideUrlLoading #1: " + request.isForMainFrame());
+    Log.e("TAG", "yhpark > shouldOverrideUrlLoading #1: " + request.isForMainFrame());
     if (webView.options.useShouldOverrideUrlLoading) {
-      boolean isRedirect = false;
+      boolean isForMainFrame = request.isForMainFrame();
+      if (request.getUrl().toString().contains("/ssoIdConfirmPop.gs") 
+        || request.getUrl().toString().contains("/intgCustChgPop.gs")
+        || request.getUrl().toString().contains("/cu/kmc_confirm")
+        || request.getUrl().toString().contains("kbpay_mo_callback")
+        || request.getUrl().toString().contains("/pa/easy_total_pay_auth_callback")
+        || request.getUrl().toString().contains("/pa/kbpay_auth_callback")
+        || request.getUrl().toString().contains("/resultKbpayAuth.do")
+        || request.getUrl().toString().contains("/pa/comm_auth_pop_callback")) {
+          isForMainFrame = false;
+      }
+
+      boolean isRedirect = false;   
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         isRedirect = request.isRedirect();
       }
@@ -79,11 +91,11 @@ public class InAppWebViewClient extends WebViewClient {
               request.getUrl().toString(),
               request.getMethod(),
               request.getRequestHeaders(),
-              request.isForMainFrame(),
+              isForMainFrame,
               request.hasGesture(),
               isRedirect);
       if (webView.regexToCancelSubFramesLoadingCompiled != null) {
-        Log.e("TAG", "shouldOverrideUrlLoading #2: " + request.isForMainFrame());
+        Log.e("TAG", "yhpark > shouldOverrideUrlLoading #2: " + request.isForMainFrame());
         if (request.isForMainFrame())
           return true;
         else {
@@ -91,10 +103,20 @@ public class InAppWebViewClient extends WebViewClient {
           return m.matches();
         }
       } else {
-        Log.e("TAG", "shouldOverrideUrlLoading #3: " + request.isForMainFrame());
+        Log.e("TAG", "yhpark > shouldOverrideUrlLoading #3: " + request.isForMainFrame());
         // There isn't any way to load an URL for a frame that is not the main frame,
         // so if the request is not for the main frame, the navigation is allowed.
-        return request.isForMainFrame();
+      if (request.getUrl().toString().contains("/ssoIdConfirmPop.gs") 
+        || request.getUrl().toString().contains("/intgCustChgPop.gs")
+        || request.getUrl().toString().contains("/cu/kmc_confirm")
+        || request.getUrl().toString().contains("kbpay_mo_callback")
+        || request.getUrl().toString().contains("/pa/easy_total_pay_auth_callback")
+        || request.getUrl().toString().contains("/pa/kbpay_auth_callback")
+        || request.getUrl().toString().contains("/resultKbpayAuth.do")
+        || request.getUrl().toString().contains("/pa/comm_auth_pop_callback")) {
+          isForMainFrame = false;
+      }        
+        return isForMainFrame;
       }
     }
     return false;
