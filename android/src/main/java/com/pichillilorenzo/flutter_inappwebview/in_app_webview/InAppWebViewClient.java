@@ -68,7 +68,7 @@ public class InAppWebViewClient extends WebViewClient {
   @Override
   public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
     InAppWebView webView = (InAppWebView) view;
-    Log.e("TAG", "shouldOverrideUrlLoading #1: " + request.isForMainFrame);
+    Log.e("TAG", "shouldOverrideUrlLoading #1: " + request.isForMainFrame());
     if (webView.options.useShouldOverrideUrlLoading) {
       boolean isRedirect = false;
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -83,7 +83,7 @@ public class InAppWebViewClient extends WebViewClient {
               request.hasGesture(),
               isRedirect);
       if (webView.regexToCancelSubFramesLoadingCompiled != null) {
-        Log.e("TAG", "shouldOverrideUrlLoading #2: " + request.isForMainFrame);
+        Log.e("TAG", "shouldOverrideUrlLoading #2: " + request.isForMainFrame());
         if (request.isForMainFrame())
           return true;
         else {
@@ -91,7 +91,7 @@ public class InAppWebViewClient extends WebViewClient {
           return m.matches();
         }
       } else {
-        Log.e("TAG", "shouldOverrideUrlLoading #3: " + request.isForMainFrame);
+        Log.e("TAG", "shouldOverrideUrlLoading #3: " + request.isForMainFrame());
         // There isn't any way to load an URL for a frame that is not the main frame,
         // so if the request is not for the main frame, the navigation is allowed.
         return request.isForMainFrame();
