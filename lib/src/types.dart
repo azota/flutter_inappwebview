@@ -1,23 +1,22 @@
 import 'dart:collection';
-import 'dart:typed_data';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
-import 'x509_certificate/x509_certificate.dart';
-import 'x509_certificate/asn1_distinguished_names.dart';
-
-import 'in_app_webview/webview.dart';
-import 'in_app_webview/in_app_webview_controller.dart';
-import 'http_auth_credentials_database.dart';
 import 'cookie_manager.dart';
-import 'web_storage/web_storage.dart';
+import 'http_auth_credentials_database.dart';
+import 'in_app_webview/in_app_webview_controller.dart';
+import 'in_app_webview/webview.dart';
 import 'pull_to_refresh/pull_to_refresh_controller.dart';
 import 'pull_to_refresh/pull_to_refresh_options.dart';
 import 'util.dart';
-import 'web_message/web_message_listener.dart';
 import 'web_message/web_message_channel.dart';
+import 'web_message/web_message_listener.dart';
+import 'web_storage/web_storage.dart';
+import 'x509_certificate/asn1_distinguished_names.dart';
+import 'x509_certificate/x509_certificate.dart';
 
 ///This type represents a callback, added with [InAppWebViewController.addJavaScriptHandler], that listens to post messages sent from JavaScript.
 ///
@@ -6388,6 +6387,8 @@ class URLRequest {
   ///**NOTE**: available only on iOS.
   Uri? iosMainDocumentURL;
 
+  String? urlString;
+
   URLRequest(
       {required this.url,
       this.method,
@@ -6401,7 +6402,8 @@ class URLRequest {
       this.iosHttpShouldUsePipelining,
       this.iosNetworkServiceType,
       this.iosTimeoutInterval,
-      this.iosMainDocumentURL});
+      this.iosMainDocumentURL,
+      this.urlString});
 
   static URLRequest? fromMap(Map<String, dynamic>? map) {
     if (map == null) {
@@ -6425,6 +6427,7 @@ class URLRequest {
       iosMainDocumentURL: map["iosMainDocumentURL"] != null
           ? Uri.parse(map["iosMainDocumentURL"])
           : null,
+      urlString: map["url"],
     );
   }
 
